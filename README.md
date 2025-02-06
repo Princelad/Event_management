@@ -54,6 +54,17 @@ This is a College Event Management System built using PySide6 for the GUI and pa
     - Mark participants as attended.
     - View a summary of total participants in each event.
 
+### Sample Input
+
+To add a participant, enter the details in the following format:
+```
+Name, Contact, Department, Status
+```
+For example:
+```
+Alice, 1234567890, IT, Not Attended
+```
+
 ## Project Structure
 
 - [main.py](http://_vscodecontentref_/1): Entry point of the application.
