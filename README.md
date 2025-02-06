@@ -21,8 +21,8 @@ This is a College Event Management System built using PySide6 for the GUI and pa
 
 1. Clone the repository:
     ```sh
-    git clone https://github.com/yourusername/college-event-management.git
-    cd college-event-management
+    git clone https://github.com/Princelad/Event_management.git
+    cd Event_management
     ```
 
 2. Install the required packages:
