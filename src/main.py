@@ -1,11 +1,14 @@
 import sys
 from PySide6.QtWidgets import QApplication
-from main_window import MainWindow
+from ui.start_screen import StartMenu
+
 
 def main():
     app = QApplication(sys.argv)
-    window = MainWindow()
+    window = StartMenu()
+    window.show()
     sys.exit(app.exec())
+
 
 if __name__ == '__main__':
     main()
