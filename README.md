@@ -10,6 +10,15 @@ This is a College Event Management System built using PySide6 for the GUI and pa
 - **Attendance Marking**: Mark participants as attended.
 - **Summary**: View a summary of total participants in each event.
 
+## Screenshots
+
+### Start Screen
+![Start Screen](images/Start.png)
+
+### Main Screen
+![Main Screen](images/Main.png)
+
+
 ## Requirements
 
 - Python 3.6+
