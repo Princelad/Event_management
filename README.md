@@ -67,11 +67,11 @@ Alice, 1234567890, IT, Not Attended
 
 ## Project Structure
 
-- [main.py](http://_vscodecontentref_/1): Entry point of the application.
-- [event_manager.py](http://_vscodecontentref_/2): Contains the [EventManager](http://_vscodecontentref_/3) class for managing events and participants.
-- [start_screen.py](http://_vscodecontentref_/4): Contains the [StartMenu](http://_vscodecontentref_/5) class for the start screen.
-- [main_screen.py](http://_vscodecontentref_/6): Contains the [MainWindow](http://_vscodecontentref_/7) class for the main event management window.
+- [main.py](src/main.py): Entry point of the application.
+- [event_manager.py](src/event_manager.py): Contains the [EventManager](src/event_manager.py) class for managing events and participants.
+- [start_screen.py](src/ui/start_screen.py): Contains the [StartMenu](src/ui/start_screen.py) class for the start screen.
+- [main_screen.py](src/ui/main_screen.py): Contains the [MainWindow](src/ui/main_screen.py) class for the main event management window.
 
 ## License
 
-This project is licensed under the MIT License. See the [LICENSE](http://_vscodecontentref_/8) file for details.
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
