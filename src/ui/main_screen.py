@@ -1,5 +1,5 @@
 from PySide6 import QtCore
-from PySide6.QtWidgets import QMainWindow, QLabel, QVBoxLayout, QWidget, QPushButton, QLineEdit, QListWidget, QMessageBox, QFileDialog, QHBoxLayout
+from PySide6.QtWidgets import QMainWindow, QLabel, QVBoxLayout, QWidget, QPushButton, QLineEdit, QListWidget, QMessageBox, QFileDialog, QHBoxLayout, QComboBox
 from event_manager import EventManager
 import pandas as pd
 
@@ -24,21 +24,29 @@ class MainWindow(QMainWindow):
         self.label.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         layout.addWidget(self.label)
 
-        self.event_list = QListWidget()
-        self.event_list.itemSelectionChanged.connect(self.on_event_selected)
-        layout.addWidget(self.event_list)
+        self.event_input = QComboBox()
+        self.event_input.setEditable(True)
+        self.event_input.setPlaceholderText("Select or enter event name")
+        self.event_input.currentTextChanged.connect(self.on_event_selected)
+        layout.addWidget(self.event_input)
 
         self.participant_list = QListWidget()
         layout.addWidget(self.participant_list)
-
-        self.event_input = QLineEdit()
-        self.event_input.setPlaceholderText("Enter event name")
-        layout.addWidget(self.event_input)
 
         self.participant_input = QLineEdit()
         self.participant_input.setPlaceholderText(
             "Enter: Name, Contact, Dept, Status")
         layout.addWidget(self.participant_input)
+
+        # Apply stylesheet to change placeholder text color
+        self.setStyleSheet("""
+            QComboBox QAbstractItemView {
+                color: gray;
+            }
+            QLineEdit[placeholderText] {
+                color: gray;
+            }
+        """)
 
         # Create a horizontal layout for buttons
         button_layout = QHBoxLayout()
@@ -104,31 +112,29 @@ class MainWindow(QMainWindow):
 
     def refresh_event_list(self):
         """Refresh the event list in UI."""
-        self.event_list.clear()
+        self.event_input.clear()
         for event_name in self.event_manager.events.keys():
-            self.event_list.addItem(event_name)
+            self.event_input.addItem(event_name)
 
     def on_event_selected(self):
         """Updates participant list when an event is selected."""
-        event_name = self.event_list.currentItem().text(
-        ) if self.event_list.currentItem() else None
+        event_name = self.event_input.currentText().strip()
         self.update_participant_list(event_name)
 
     def add_event(self):
         """Adds an event to the system."""
-        event_name = self.event_input.text().strip()
+        event_name = self.event_input.currentText().strip()
         if event_name:
             self.event_manager.add_event(event_name)
-            self.event_list.addItem(event_name)
-            self.event_input.clear()
+            self.event_input.addItem(event_name)
+            self.event_input.setCurrentText("")
         else:
             QMessageBox.warning(self, "Input Error",
                                 "Event name cannot be empty")
 
     def add_participant(self):
         """Adds a participant to the selected event."""
-        event_name = self.event_list.currentItem().text(
-        ) if self.event_list.currentItem() else None
+        event_name = self.event_input.currentText().strip()
         details = self.participant_input.text().split(", ")
 
         if event_name and len(details) == 4:
@@ -155,7 +161,8 @@ class MainWindow(QMainWindow):
         if selected_participant:
             name = selected_participant.text().split(" (")[0]
             self.event_manager.mark_participation(name, "Attended")
-            self.update_participant_list(self.event_list.currentItem().text())
+            self.update_participant_list(
+                self.event_input.currentText().strip())
 
     def show_summary(self):
         """Displays a summary of total participants in each event."""
