@@ -5,13 +5,13 @@ This is a College Event Management System built using PySide6 for the GUI and pa
 ## Features
 
 - **Event Management**: Add and manage events.
-- **Participant Management**: Add participants to events with details such as name, contact, department, and status.
+- **Participant Management**: Add participants to events with details such as name, student ID, and status.
 - **Import from Excel**: Import participant data from Excel files.
+- **Export to Excel**: Export participant data to Excel files.
 - **Attendance Marking**: Mark participants as attended.
 - **Summary**: View a summary of total participants in each event.
 
 ## Screenshots
-
 ### Start Screen
 ![Start Screen](images/Start.png)
 
@@ -58,11 +58,11 @@ This is a College Event Management System built using PySide6 for the GUI and pa
 
 To add a participant, enter the details in the following format:
 ```
-Name, Contact, Department, Status
+Name, Student ID, Status
 ```
 For example:
 ```
-Alice, 1234567890, IT, Not Attended
+Alice, 12xx123, Not Attended
 ```
 
 ## Project Structure
