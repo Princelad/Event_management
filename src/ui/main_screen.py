@@ -35,7 +35,7 @@ class MainWindow(QMainWindow):
 
         self.participant_input = QLineEdit()
         self.participant_input.setPlaceholderText(
-            "Enter: Name, Contact, Dept, Status")
+            "Enter: Name, Student ID, Status")
         layout.addWidget(self.participant_input)
 
         # Apply stylesheet to change placeholder text color
@@ -63,6 +63,10 @@ class MainWindow(QMainWindow):
         self.import_button.clicked.connect(self.import_from_excel)
         button_layout.addWidget(self.import_button)
 
+        self.export_button = QPushButton("Export to Excel")
+        self.export_button.clicked.connect(self.export_participants)
+        button_layout.addWidget(self.export_button)
+
         # Add the horizontal layout to the main layout
         layout.addLayout(button_layout)
 
@@ -87,17 +91,17 @@ class MainWindow(QMainWindow):
             df = pd.read_excel(file_path)
 
             # Validate required columns
-            required_columns = {"Event Name", "Participant Name",
-                                "Contact Number", "Department", "Status"}
+            required_columns = {"Event Name",
+                                "Participant Name", "Student ID", "Status"}
             if not required_columns.issubset(df.columns):
                 QMessageBox.warning(
-                    self, "Error", "Invalid Excel format. Required columns: Event Name, Participant Name, Contact Number, Department, Status")
+                    self, "Error", "Invalid Excel format. Required columns: Event Name, Participant Name, Student ID, Status")
                 return
 
             for _, row in df.iterrows():
                 event_name = row["Event Name"]
                 participant = (
-                    row["Participant Name"], row["Contact Number"], row["Department"], row["Status"])
+                    row["Participant Name"], row["Student ID"], row["Status"])
 
                 self.event_manager.add_event(event_name)
                 self.event_manager.add_participant(event_name, participant)
@@ -109,6 +113,21 @@ class MainWindow(QMainWindow):
         except Exception as e:
             QMessageBox.critical(
                 self, "Error", f"Failed to read Excel file:\n{str(e)}")
+
+    def export_participants(self):
+        """Exports participant data to an Excel file."""
+        file_path, _ = QFileDialog.getSaveFileName(
+            self, "Save Excel File", "", "Excel Files (*.xlsx)")
+        if file_path:
+            if not file_path.endswith('.xlsx'):
+                file_path += '.xlsx'
+            try:
+                self.event_manager.export_participants(file_path)
+                QMessageBox.information(
+                    self, "Success", "Participants exported successfully!", QMessageBox.StandardButton.Ok)
+            except Exception as e:
+                QMessageBox.critical(
+                    self, "Error", f"Failed to export data to Excel file: {e}", QMessageBox.StandardButton.Ok)
 
     def refresh_event_list(self):
         """Refresh the event list in UI."""
@@ -137,13 +156,13 @@ class MainWindow(QMainWindow):
         event_name = self.event_input.currentText().strip()
         details = self.participant_input.text().split(", ")
 
-        if event_name and len(details) == 4:
+        if event_name and len(details) == 3:
             self.event_manager.add_participant(event_name, tuple(details))
             self.participant_input.clear()
             self.update_participant_list(event_name)
         else:
-            QMessageBox.warning(
-                self, "Input Error", "Enter valid details: Name, Contact, Dept, Status")
+            QMessageBox.warning(self, "Input Error",
+                                "Enter valid details: Name, Student ID, Status")
 
     def update_participant_list(self, event_name):
         """Displays the list of participants for the selected event."""
@@ -151,9 +170,10 @@ class MainWindow(QMainWindow):
         if not event_name:
             return
         participants = self.event_manager.display_participants(event_name)
-        for participant in participants:
+        unique_participants = set(participants)
+        for participant in unique_participants:
             self.participant_list.addItem(
-                f"{participant[0]} ({participant[3]})")
+                f"{participant[0]} ({participant[2]})")
 
     def mark_as_attended(self):
         """Marks a participant as 'Attended'."""

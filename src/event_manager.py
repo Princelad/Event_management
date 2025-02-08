@@ -1,3 +1,6 @@
+import pandas as pd
+
+
 class EventManager:
     def __init__(self):
         self.events = {}
@@ -37,3 +40,15 @@ class EventManager:
     def generate_summary(self):
         """Generates a summary of total participants in each event."""
         return {event: len(participants) for event, participants in self.events.items()}
+
+    def export_participants(self, file_path):
+        """Exports participants' information to an Excel file."""
+        data = []
+        for event_name, participants in self.events.items():
+            for participant in participants:
+                data.append([event_name, participant[0],
+                            participant[1], participant[2]])
+
+        df = pd.DataFrame(
+            data, columns=["Event Name", "Participant Name", "Student ID", "Status"])
+        df.to_excel(file_path, index=False, engine='openpyxl')
